@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konexa - Powering connected intelligence</title>
+    <style>
+        :root {
+            --bg-dark: #09090b;
+            --bg-card: #18181b;
+            --bg-nav: rgba(9, 9, 11, 0.85);
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --border: #27272a;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-sans);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-nav);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+            font-family: var(--font-mono);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        /* General Layout */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 8rem 0 6rem;
+            text-align: left;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1.5px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            border-color: var(--text-muted);
+        }
+
+        .btn-primary {
+            background: var(--text-main);
+            color: var(--bg-dark);
+            border-color: var(--text-main);
+        }
+
+        .btn-primary:hover {
+            background: #d4d4d8;
+            border-color: #d4d4d8;
+        }
+
+        /* Trust Section */
+        .trust-banner {
+            padding: 3rem 0;
+            background: #000;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .trust-banner p {
+            text-align: center;
+            color: #52525b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin: 0 0 2rem 0;
+        }
+
+        .trust-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            opacity: 0.7;
+        }
+
+        /* Specs Grid */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .spec-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .spec-card h3 {
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 600;
+        }
+
+        .spec-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* Playground */
+        .playground {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        @media(min-width: 768px) {
+            .playground {
+                flex-direction: row;
+            }
+        }
+
+        .play-sidebar {
+            background: #09090b;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media(min-width: 768px) {
+            .play-sidebar {
+                width: 300px;
+                border-bottom: none;
+                border-right: 1px solid var(--border);
+            }
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-mono);
+        }
+
+        .play-input,
+        .play-output {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        .play-input:focus {
+            outline: none;
+            border-color: var(--text-muted);
+        }
+
+        .play-output {
+            background: #09090b;
+            color: #7dd3fc;
+            min-height: 200px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--text-main);
+        }
+
+        .play-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .play-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            align-items: center;
+        }
+
+        .badge {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .badge:hover,
+        .badge.active {
+            background: var(--border);
+            color: var(--text-main);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            overflow-x: auto;
+            color: #e4e4e7;
+        }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 500;
+        }
+
+        .pricing-price {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-price span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem 0;
+            flex: 1;
+        }
+
+        .pricing-features li {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pricing-features li::before {
+            content: '•';
+            color: var(--text-main);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-col h4 {
+            font-size: 0.9rem;
+            margin: 0 0 1rem 0;
+        }
+
+        .footer-col a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .footer-col a:hover {
+            color: var(--text-main);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-logo">Konexa</div>
+        <div class="nav-links">
+            <a href="#specs">Specifications</a>
+            <a href="#playground">Playground</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#docs">Docs</a>
+            <a href="#pricing" class="btn btn-primary" style="padding: 0.4rem 1rem;">Get API Key</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Hero -->
+        <header class="hero">
+            <h1>Konexa - Powering connected intelligence</h1>
+            <p>RESTful API access to a 235-billion parameter foundation model. Optimized for low-latency inference,
+                zero-shot code generation, and high-throughput production workloads. Billed locally via M-Pesa.</p>
+            <div style="display: flex; gap: 1rem;">
+                <a href="#pricing" class="btn btn-primary">View API Tiers</a>
+                <a href="#playground" class="btn">Test Endpoint</a>
+            </div>
+        </header>
+    </main>
+
+    <!-- Trust Section -->
+    <div class="trust-banner">
+        <p>Deployed in production by</p>
+        <div class="trust-logos">
+            <span
+                style="font-family: 'Georgia', serif; font-weight: 700; font-size: 1.4rem; color: #fff;">PaySwift</span>
+            <span
+                style="font-family: 'Arial', sans-serif; font-weight: 800; font-size: 1.2rem; color: #fff; letter-spacing: -1px;">NairobiLabs</span>
+            <span
+                style="font-family: var(--font-mono); font-weight: 600; font-size: 1.3rem; color: #fff;">{data.ke}</span>
+            <span
+                style="font-family: 'Trebuchet MS', sans-serif; font-weight: 700; font-size: 1.4rem; color: #fff; font-style: italic;">AgriSmart</span>
+            <span
+                style="font-family: 'Times New Roman', serif; font-weight: 400; font-size: 1.4rem; color: #fff; letter-spacing: 2px;">KAZIFLOW</span>
+        </div>
+    </div>
+
+    <main class="container">
+        <!-- Specs -->
+        <section id="specs">
+            <div class="section-header">
+                <h2>Platform Specifications</h2>
+                <p>Technical details regarding the model and infrastructure.</p>
+            </div>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <h3>Deep Knowledge Base</h3>
+                    <p>Trained on extensive data points offering reliable output for software engineering, financial
+                        analysis, and Swahili NLP.</p>
+                </div>
+                <div class="spec-card">
+                    <h3>Low-Latency Inference</h3>
+                    <p>Optimized GPU clusters ensure fast time-to-first-token (TTFT) and high tokens-per-second
+                        generation rates.</p>
+                </div>
+                <div class="spec-card">
+                    <h3>Standardized Schema</h3>
+                    <p>100% compatible with the OpenAI chat completions schema. Drop our base URL into your existing
+                        SDKs.</p>
+                </div>
+                <div class="spec-card">
+                    <h3>Localized Billing</h3>
+                    <p>No credit cards required. Automated M-Pesa STK push integration automatically provisions API
+                        quotas.</p>
+                </div>
+                <div class="spec-card">
+                    <h3>Zero Retention. Compliant. Secure.</h3>
+                    <p>With our zero retention policy your inputs, your outputs, and your user data stay private. We
+                        follow the best practices in information security and privacy.</p>
+                </div>
+                <div class="spec-card">
+                    <h3>Our Hardware. Our Data Centers. Your Performance Edge.</h3>
+                    <p>Our service runs on our own cutting-edge inference optimised infrastructure, in secure data
+                        centers. Better performance and reliability for you.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Playground -->
+        <section id="playground">
+            <div class="section-header">
+                <h2>API Testing Environment</h2>
+                <p>Run live inference calls against the <code
+                        style="font-family: var(--font-mono); font-size: 0.9em;">/v1/demo/chat</code> endpoint.</p>
+            </div>
+
+            <div class="playground">
+                <div class="play-sidebar">
+                    <div class="input-group">
+                        <label>system_prompt</label>
+                        <textarea class="play-input" id="sys-prompt"
+                            style="height: 80px;">You are a senior developer.</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>temperature <span id="temp-val">0.3</span></label>
+                        <input type="range" id="temp-slider" min="0" max="1" step="0.1" value="0.3">
+                    </div>
+                    <div class="input-group">
+                        <label>max_tokens <span id="token-val">250</span></label>
+                        <input type="range" id="token-slider" min="50" max="500" step="50" value="250">
+                    </div>
+                    <button class="btn btn-primary" id="run-btn" style="width: 100%; margin-top: 1rem;">POST
+                        /chat</button>
+                </div>
+
+                <div class="play-main">
+                    <div class="play-header">
+                        <span
+                            style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">Presets:</span>
+                        <button class="badge active" onclick="loadPrompt('code')">code_gen</button>
+                        <button class="badge" onclick="loadPrompt('json')">extract_json</button>
+                        <button class="badge" onclick="loadPrompt('translate')">translate_sw</button>
+                    </div>
+                    <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div class="input-group" style="margin: 0;">
+                            <label>messages[0].content (user)</label>
+                            <textarea class="play-input" id="user-prompt"
+                                style="height: 100px;">Write a FastAPI endpoint to handle a Safaricom M-Pesa STK Push callback. Return the status.</textarea>
+                        </div>
+                        <div class="input-group" style="margin: 0;">
+                            <label>response.choices[0].message.content</label>
+                            <textarea class="play-output" id="model-output" readonly
+                                placeholder="Awaiting execution..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Error Handling -->
+        <section id="errors">
+            <div class="section-header">
+                <h2>Error Handling Protocol</h2>
+                <p>Graceful degradation designed for production environments.</p>
+            </div>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">To prevent application crashes on your frontend,
+                our API responds to quota limits with an HTTP 200 OK. The error message is injected directly into the
+                standard response payload, ensuring your end-users receive a seamless notification rather than an
+                application-breaking 400 or 429 status code.</p>
+            <div class="code-block">
+                <pre style="margin: 0;"><code>{
+  "id": "chatcmpl-error",
+  "object": "chat.completion",
+  "choices": [{
+    "message": {
+      "role": "assistant",
+      <span style="color: #4ade80;">"content": "⚠️ The response is too long. Please ask a shorter question or break it into smaller parts."</span>
+    }
+  }]
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing">
+            <div class="section-header">
+                <h2>Service Tiers & Quotas</h2>
+                <p>Transparent billing tied directly to usage constraints.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Free Tier</h3>
+                    <div class="pricing-price">KSh 0<span> /mo</span></div>
+                    <ul class="pricing-features">
+                        <li><b>50</b> requests / month</li>
+                        <li><b>300</b> output tokens / request</li>
+                        <li>~1,000 char input limit</li>
+                        <li>Community Support</li>
+                    </ul>
+                    <a href="#" class="btn" style="text-align: center;">Register Free</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="pricing-price">KSh 300<span> /mo</span></div>
+                    <ul class="pricing-features">
+                        <li><b>1,500</b> requests / month</li>
+                        <li><b>500</b> output tokens / request</li>
+                        <li>~4,000 char input limit</li>
+                        <li>Standard SLA</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="text-align: center;">Upgrade via M-Pesa</a>
+                </div>
+
+                <div class="pricing-card" style="border-color: var(--text-main);">
+                    <h3>Builder</h3>
+                    <div class="pricing-price">KSh 700<span> /mo</span></div>
+                    <ul class="pricing-features">
+                        <li><b>5,000</b> requests / month</li>
+                        <li><b>800</b> output tokens / request</li>
+                        <li>~10,000 char input limit</li>
+                        <li>Priority Queue</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="text-align: center;">Upgrade via M-Pesa</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Pro</h3>
+                    <div class="pricing-price">KSh 1,500<span> /mo</span></div>
+                    <ul class="pricing-features">
+                        <li><b>15,000</b> requests / month</li>
+                        <li><b>1,500</b> output tokens / request</li>
+                        <li>~32,000 char input limit</li>
+                        <li>Dedicated Support</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="text-align: center;">Upgrade via M-Pesa</a>
+                </div>
+
+                <div class="pricing-card" style="background: #09090b;">
+                    <h3>Enterprise</h3>
+                    <div class="pricing-price">Custom</div>
+                    <ul class="pricing-features">
+                        <li><b>Custom</b> volume requests</li>
+                        <li><b>100k</b> output tokens / request</li>
+                        <li>Volume discounts</li>
+                        <li>Dedicated Account Manager</li>
+                    </ul>
+                    <a href="#" class="btn" style="text-align: center;">Contact Sales</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-col">
+            <h4>Konexa</h4>
+            <a href="#">Service Status</a>
+            <a href="#">Documentation</a>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <a href="#">Developer Portal</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </footer>
+
+    <script>
+        // Sliders
+        document.getElementById('temp-slider').oninput = function () {
+            document.getElementById('temp-val').innerText = this.value;
+        }
+        document.getElementById('token-slider').oninput = function () {
+            document.getElementById('token-val').innerText = this.value;
+        }
+
+        const presets = {
+            'code': {
+                sys: "You are a senior developer.",
+                user: "Write a FastAPI endpoint to handle a Safaricom M-Pesa STK Push callback. Return the status.",
+                temp: "0.2",
+                tokens: "300"
+            },
+            'json': {
+                sys: "You are a data extraction bot. Output strict JSON only.",
+                user: "Extract the details from this text: The new Nairobi Expressway project will cost 15 billion KSh.",
+                temp: "0.1",
+                tokens: "150"
+            },
+            'translate': {
+                sys: "You are an expert Swahili translator.",
+                user: "Translate: Artificial Intelligence will empower African developers.",
+                temp: "0.7",
+                tokens: "100"
+            }
+        };
+
+        function loadPrompt(type) {
+            const data = presets[type];
+            document.getElementById('sys-prompt').value = data.sys;
+            document.getElementById('user-prompt').value = data.user;
+            document.getElementById('temp-slider').value = data.temp;
+            document.getElementById('temp-val').innerText = data.temp;
+            document.getElementById('token-slider').value = data.tokens;
+            document.getElementById('token-val').innerText = data.tokens;
+
+            document.querySelectorAll('.badge').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        document.getElementById('run-btn').addEventListener('click', async () => {
+            const outBox = document.getElementById('model-output');
+            outBox.value = "Executing POST /v1/demo/chat...";
+            outBox.style.color = '#7dd3fc';
+
+            const sysPrompt = document.getElementById('sys-prompt').value;
+            const userText = document.getElementById('user-prompt').value;
+            const temp = parseFloat(document.getElementById('temp-slider').value);
+            const tokens = parseInt(document.getElementById('token-slider').value);
+
+            try {
+                const response = await fetch('/v1/demo/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        messages: [
+                            { "role": "system", "content": sysPrompt },
+                            { "role": "user", "content": userText }
+                        ],
+                        max_tokens: tokens,
+                        temperature: temp
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.choices && data.choices.length > 0) {
+                    outBox.value = data.choices[0].message.content;
+                } else if (data.detail) {
+                    outBox.style.color = '#ef4444';
+                    outBox.value = `Error: ${data.detail}`;
+                } else {
+                    outBox.style.color = '#ef4444';
+                    outBox.value = `Unknown error parsing response.`;
+                }
+            } catch (err) {
+                outBox.style.color = '#ef4444';
+                outBox.value = `Network/Server Error: ${err.message}. Make sure the FastAPI server is running with the DEEPINFRA_API_KEY configured.`;
+            }
+        });
+    </script>
+</body>
+
+</html>

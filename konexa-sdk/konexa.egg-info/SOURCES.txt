@@ -1,0 +1,8 @@
+README.md
+setup.py
+konexa/__init__.py
+konexa.egg-info/PKG-INFO
+konexa.egg-info/SOURCES.txt
+konexa.egg-info/dependency_links.txt
+konexa.egg-info/requires.txt
+konexa.egg-info/top_level.txt

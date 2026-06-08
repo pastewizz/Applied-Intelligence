@@ -1,0 +1,18 @@
+# Environments
+.env
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Database
+app.db
+*.sqlite3
+
+# Frontend builds
+frontend/dist/
+frontend/node_modules/
+
+# OS generated files
+.DS_Store
+Thumbs.db

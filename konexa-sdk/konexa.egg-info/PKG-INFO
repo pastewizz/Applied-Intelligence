@@ -1,0 +1,50 @@
+Metadata-Version: 2.1
+Name: konexa
+Version: 0.1.0
+Summary: The official Python SDK for the Konexa AI API Platform
+Home-page: https://github.com/konexa-ai/konexa-python
+Author: Konexa AI Team
+Author-email: dev@konexa.ke
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+# Konexa Python SDK
+
+The official Python library for the Konexa AI API.
+
+## Installation
+
+```bash
+pip install konexa
+```
+
+## Quick Start
+
+```python
+from konexa import Konexa
+
+# Initialize the client
+client = Konexa(api_key="your_konexa_api_key")
+
+# Create a chat completion
+response = client.chat_completion(
+    messages=[
+        {"role": "user", "content": "Hello Konexa!"}
+    ]
+)
+
+print(response['choices'][0]['message']['content'])
+```
+
+## Features
+
+- **OpenAI Compatible**: Follows familiar patterns for easy migration.
+- **Lightweight**: Zero heavy dependencies.
+- **Localized**: Optimized for the Konexa infrastructure in Kenya.
+
+## License
+
+MIT
