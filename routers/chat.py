@@ -195,13 +195,19 @@ async def chat(
     key_obj.tokens_consumed = (key_obj.tokens_consumed or 0) + actual_tokens
 
     # Analytics log
+    orchestration_meta = result.get("orchestration_meta", {})
+    usage_breakdown = result.get("usage", {})
     db.add(RequestLog(
         user_id=user.id,
         task_category=result.get("task_category", "GENERAL"),
-        provider=result.get("orchestration_meta", {}).get("primary", {}).get("provider", "deepinfra"),
+        provider=orchestration_meta.get("primary", {}).get("provider", "deepinfra"),
         model=result.get("routed_model", "unknown"),
-        latency_ms=latency,
+        route_type=orchestration_meta.get("route_type", "primary"),
+        prompt_tokens=usage_breakdown.get("prompt_tokens", 0),
+        completion_tokens=usage_breakdown.get("completion_tokens", 0),
         tokens_used=actual_tokens,
+        total_latency_ms=latency,
+        cache_hit=result.get("cached", False),
         status_code=200
     ))
     db.commit()
