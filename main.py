@@ -11,7 +11,7 @@ load_dotenv()
 from routers import user, chat, payments, admin, analytics
 from routers.admin_pricing import router as pricing_router
 from database import engine
-from sqlalchemy import text
+from sqlalchemy import inspect, text
 
 app = FastAPI(
     title="Applied Intelligence API",
@@ -65,17 +65,42 @@ async def startup_event():
             except Exception as e:
                 print(f"Per-key budget patch failed: {e}")
 
-        # Patch: request_logs missing columns
-        for col in ["provider", "tokens_used", "created_at"]:
-            try:
-                conn.execute(text(f"SELECT {col} FROM request_logs LIMIT 1"))
-            except Exception:
-                try:
-                    dtype = "TIMESTAMP DEFAULT NOW()" if col == "created_at" else ("INTEGER" if col == "tokens_used" else "VARCHAR")
-                    with engine.begin() as t:
-                        t.execute(text(f"ALTER TABLE request_logs ADD COLUMN {col} {dtype}"))
-                except Exception as e:
-                    print(f"request_logs.{col} patch failed: {e}")
+        # Patch: request_logs telemetry columns
+        request_log_columns = {
+            "task_category": "VARCHAR",
+            "classification_method": "VARCHAR",
+            "provider": "VARCHAR",
+            "model": "VARCHAR",
+            "route_type": "VARCHAR",
+            "prompt_tokens": "INTEGER DEFAULT 0",
+            "completion_tokens": "INTEGER DEFAULT 0",
+            "tokens_used": "INTEGER DEFAULT 0",
+            "cost_usd": "VARCHAR",
+            "latency_ms": "INTEGER",
+            "embedding_latency_ms": "INTEGER",
+            "routing_latency_ms": "INTEGER",
+            "llm_latency_ms": "INTEGER",
+            "total_latency_ms": "INTEGER",
+            "cache_hit": "BOOLEAN DEFAULT FALSE",
+            "status_code": "INTEGER",
+            "created_at": "TIMESTAMP",
+        }
+        try:
+            inspector = inspect(conn)
+            existing_columns = {
+                column["name"]
+                for column in inspector.get_columns("request_logs")
+            }
+            for col, dtype in request_log_columns.items():
+                if col not in existing_columns:
+                    try:
+                        with engine.begin() as t:
+                            t.execute(text(f"ALTER TABLE request_logs ADD COLUMN {col} {dtype}"))
+                        existing_columns.add(col)
+                    except Exception as e:
+                        print(f"request_logs.{col} patch failed: {e}")
+        except Exception as e:
+            print(f"request_logs schema check failed: {e}")
 
     # Seed plan_configs if empty
     try:

@@ -43,10 +43,20 @@ def run_migration():
                     id SERIAL PRIMARY KEY,
                     user_id INTEGER REFERENCES users(id),
                     task_category VARCHAR,
+                    classification_method VARCHAR,
                     provider VARCHAR,
                     model VARCHAR,
+                    route_type VARCHAR,
+                    prompt_tokens INTEGER DEFAULT 0,
+                    completion_tokens INTEGER DEFAULT 0,
+                    tokens_used INTEGER DEFAULT 0,
+                    cost_usd VARCHAR,
                     latency_ms INTEGER,
-                    tokens_used INTEGER,
+                    embedding_latency_ms INTEGER,
+                    routing_latency_ms INTEGER,
+                    llm_latency_ms INTEGER,
+                    total_latency_ms INTEGER,
+                    cache_hit BOOLEAN DEFAULT FALSE,
                     status_code INTEGER,
                     created_at TIMESTAMP DEFAULT NOW()
                 )
@@ -55,13 +65,23 @@ def run_migration():
             print("  [+] Created request_logs table")
         else:
             for col, dtype in [
-                ("task_category", "VARCHAR"),
-                ("provider",      "VARCHAR"),
-                ("model",         "VARCHAR"),
-                ("latency_ms",    "INTEGER"),
-                ("tokens_used",   "INTEGER"),
-                ("status_code",   "INTEGER"),
-                ("created_at",    "TIMESTAMP DEFAULT NOW()"),
+                ("task_category",         "VARCHAR"),
+                ("classification_method", "VARCHAR"),
+                ("provider",              "VARCHAR"),
+                ("model",                 "VARCHAR"),
+                ("route_type",            "VARCHAR"),
+                ("prompt_tokens",         "INTEGER DEFAULT 0"),
+                ("completion_tokens",     "INTEGER DEFAULT 0"),
+                ("tokens_used",           "INTEGER DEFAULT 0"),
+                ("cost_usd",              "VARCHAR"),
+                ("latency_ms",            "INTEGER"),
+                ("embedding_latency_ms",  "INTEGER"),
+                ("routing_latency_ms",    "INTEGER"),
+                ("llm_latency_ms",        "INTEGER"),
+                ("total_latency_ms",      "INTEGER"),
+                ("cache_hit",             "BOOLEAN DEFAULT FALSE"),
+                ("status_code",           "INTEGER"),
+                ("created_at",            "TIMESTAMP DEFAULT NOW()"),
             ]:
                 if not column_exists(conn, "request_logs", col):
                     conn.execute(text(f"ALTER TABLE request_logs ADD COLUMN {col} {dtype}"))

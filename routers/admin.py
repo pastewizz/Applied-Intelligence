@@ -121,13 +121,13 @@ def get_orchestration_stats(request: Request, admin: User = Depends(check_admin)
     task_stats = db.query(
         RequestLog.task_category, 
         func.count(RequestLog.id),
-        func.avg(RequestLog.latency_ms)
+        func.avg(RequestLog.total_latency_ms)
     ).group_by(RequestLog.task_category).all()
     
     # Provider performance
     provider_stats = db.query(
         RequestLog.provider,
-        func.avg(RequestLog.latency_ms),
+        func.avg(RequestLog.total_latency_ms),
         func.count(RequestLog.id)
     ).group_by(RequestLog.provider).all()
 

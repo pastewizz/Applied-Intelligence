@@ -117,7 +117,7 @@ async def analyze_fraud(
         task_category="FRAUD_DETECTION",
         provider=result.get("orchestration_meta", {}).get("primary", {}).get("provider", "deepinfra"),
         model=result.get("routed_model", "unknown"),
-        latency_ms=result.get("latency_ms", 0),
+        total_latency_ms=result.get("latency_ms", 0),
         tokens_used=billed_tokens,
         status_code=200
     ))
@@ -250,7 +250,7 @@ async def analyze_data(
         task_category="ANALYTICS",
         provider=result.get("orchestration_meta", {}).get("primary", {}).get("provider", "deepinfra"),
         model=result.get("routed_model", "unknown"),
-        latency_ms=result.get("latency_ms", 0),
+        total_latency_ms=result.get("latency_ms", 0),
         tokens_used=billed_tokens,
         status_code=200
     ))
